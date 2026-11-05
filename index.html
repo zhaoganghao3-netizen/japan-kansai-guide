@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>关西旅行随身攻略 · 2027中秋</title>
+<style>
+:root{
+  --blue:#1a5276; --blue2:#2e86c1; --light:#eaf2f8; --bg:#f0f4f8;
+  --card:#fff; --text:#222; --gray:#888; --line:#e3e9ef;
+  --accent:#e67e22;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;padding-bottom:70px}
+header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:18px 16px 16px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+header h1{font-size:19px;font-weight:600}
+header .sub{font-size:12.5px;opacity:.85;margin-top:4px}
+header .count{margin-top:8px;font-size:12px;background:rgba(255,255,255,.15);display:inline-block;padding:3px 10px;border-radius:12px}
+main{padding:12px;max-width:640px;margin:0 auto}
+.tab-page{display:none}
+.tab-page.active{display:block}
+.card{background:var(--card);border-radius:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(26,82,118,.08);overflow:hidden}
+.card .hd{padding:10px 14px;border-bottom:1px solid var(--line);font-weight:600;font-size:15px;color:var(--blue);display:flex;align-items:center;gap:6px}
+.card .bd{padding:12px 14px}
+.badge{display:inline-block;background:var(--light);color:var(--blue);border-radius:6px;padding:2px 8px;font-size:12px;margin-right:6px}
+.badge.warn{background:#fdebd0;color:#b9770e}
+.day-chip-bar{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;-webkit-overflow-scrolling:touch}
+.day-chip{flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:6px 14px;font-size:13px;color:#555;cursor:pointer;white-space:nowrap}
+.day-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.day-title{font-size:16px;font-weight:700;color:var(--blue);margin:6px 2px 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.timeline{position:relative;padding-left:0}
+.item{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.item:last-child{border-bottom:none}
+.item .t{flex:0 0 52px;color:var(--blue2);font-weight:600;font-size:13px;padding-top:2px}
+.item .c{flex:1}
+.item .c b{font-weight:600;display:block;font-size:14.5px}
+.item .c .d{font-size:13px;color:#555;margin-top:2px}
+.item .c .m{font-size:12px;color:var(--gray);margin-top:2px}
+.navrow{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.navbtn{display:inline-flex;align-items:center;gap:4px;border:none;border-radius:14px;padding:4px 12px;font-size:12.5px;cursor:pointer;text-decoration:none}
+.navbtn.g{background:var(--light);color:var(--blue)}
+.navbtn.a{background:#f5f5f5;color:#333}
+.check-grp{margin-bottom:6px}
+.check-grp .gt{font-size:13px;color:var(--blue);font-weight:600;margin:10px 2px 4px}
+label.ck{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid #f2f5f8;cursor:pointer;font-size:14px}
+label.ck input{width:18px;height:18px;accent-color:var(--blue2);flex:0 0 auto}
+label.ck .done{color:#aaa;text-decoration:line-through}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:4px 0 8px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),#5dade2);border-radius:3px;transition:width .3s}
+.conv{display:flex;gap:10px;align-items:center;margin:8px 0}
+.conv input{flex:1;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;outline:none}
+.conv input:focus{border-color:var(--blue2)}
+.conv .arrow{color:var(--gray);font-size:18px}
+.conv label{font-size:12px;color:var(--gray)}
+.rate-row{display:flex;justify-content:space-between;font-size:12px;color:var(--gray);margin-top:6px}
+.tel-card{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line)}
+.tel-card:last-child{border-bottom:none}
+.tel-card .n{font-size:14px}
+.tel-card .n small{display:block;color:var(--gray);font-size:12px}
+.tel-card a{background:var(--light);color:var(--blue);text-decoration:none;border-radius:14px;padding:4px 14px;font-size:13px;font-weight:600}
+.phrase{padding:9px 14px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.phrase:last-child{border-bottom:none}
+.phrase .jp{font-size:14.5px}
+.phrase .zh{font-size:12px;color:var(--gray)}
+.phrase:active{background:var(--light)}
+table.bd2{width:100%;border-collapse:collapse;font-size:13px}
+table.bd2 th,table.bd2 td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+table.bd2 th{background:var(--light);color:var(--blue)}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:10}
+.bottom .tab{flex:1;text-align:center;padding:8px 0 6px;font-size:11px;color:#999;cursor:pointer}
+.bottom .tab .ico{display:block;font-size:20px;line-height:1.3}
+.bottom .tab.active{color:var(--blue);font-weight:600}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:13px;padding:8px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⛩️ 关西旅行随身攻略</h1>
+  <div class="sub">2027.9.10-9.19 · 大阪·京都·奈良 · 姐弟2人 · 请假4天</div>
+  <div class="count" id="countdown">距离出发:计算中…</div>
+</header>
+
+<main>
+  <!-- ============ 行程 ============ -->
+  <div class="tab-page active" id="page-plan">
+    <div class="card">
+      <div class="hd">🗺️ 行程总览</div>
+      <div class="bd">
+        <div style="margin-bottom:6px"><span class="badge">✈️ 去</span>9/11(六)春秋9C6575 上海浦东08:05→大阪11:20</div>
+        <div style="margin-bottom:6px"><span class="badge">🛫 回</span>9/19(日)春秋9C6566 大阪15:00→浦东16:30</div>
+        <div><span class="badge warn">📅 请假4天</span>9/13·14·16·17(9/15中秋放假)</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:6px">🏨 大阪难波4晚(9/11-14)→京都站前3晚(9/15-17)→大阪1晚(9/18) · 上海1晚(9/10)</div>
+      </div>
+    </div>
+    <div class="day-chip-bar" id="dayChips"></div>
+    <div id="dayDetail"></div>
+  </div>
+
+  <!-- ============ 清单 ============ -->
+  <div class="tab-page" id="page-check">
+    <div class="card">
+      <div class="hd">✅ 行李清单(打勾自动保存)</div>
+      <div class="bd">
+        <div class="progress"><i id="progBar" style="width:0%"></i></div>
+        <div style="font-size:12px;color:var(--gray);margin-bottom:4px" id="progText">0/0 已勾选</div>
+        <div id="checkList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 工具 ============ -->
+  <div class="tab-page" id="page-tools">
+    <div class="card">
+      <div class="hd">💴 日元换算</div>
+      <div class="bd">
+        <div class="conv">
+          <div style="flex:1"><label>日元 JPY</label><input type="number" id="inJpy" placeholder="输入日元金额" inputmode="decimal"></div>
+          <div class="arrow">⇄</div>
+          <div style="flex:1"><label>人民币 CNY</label><input type="number" id="inCny" placeholder="输入人民币" inputmode="decimal"></div>
+        </div>
+        <div class="rate-row"><span>按 100日元 = 4.3元</span><span id="rateNote">心算:去掉两个0×4.3</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hd">🆘 应急电话(点一下直接拨)</div>
+      <div class="bd" style="padding:0">
+        <div class="tel-card"><div class="n">报警(有中文翻译)<small>110</small></div><a href="tel:110">拨打</a></div>
+        <div class="tel-card"><div class="n">急救/消防<small>119</small></div><a href="tel:119">拨打</a></div>
+        <div class="tel-card"><div class="n">中国驻大阪总领事馆<small>06-6445-9481</small></div><a href="tel:0664459481">拨打</a></div>
+        <div class="tel-card"><div class="n">外交部全球领事热线<small>+86-10-12308</small></div><a href="tel:+861012308">拨打</a></div>
+        <div class="tel-card"><div class="n">春秋航空客服<small>95524</small></div><a href="tel:95524">拨打</a></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hd">🗣️ 常用日语(点一下复制)</div>
+      <div class="bd" style="padding:0" id="phraseList"></div>
+    </div>
+  </div>
+
+  <!-- ============ 预算 ============ -->
+  <div class="tab-page" id="page-budget">
+    <div class="card">
+      <div class="hd">💴 预算总表(人均·人民币)</div>
+      <div class="bd">
+        <table class="bd2" id="budgetTable"></table>
+        <div style="font-size:12px;color:var(--gray);margin-top:8px">2人总预算 ≈ 人均×2(¥17,600-23,200),买包另算;现金建议带 ¥65,000-85,000日元</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="bottom">
+  <div class="tab active" data-t="plan"><span class="ico">📅</span>行程</div>
+  <div class="tab" data-t="check"><span class="ico">✅</span>清单</div>
+  <div class="tab" data-t="tools"><span class="ico">🧰</span>工具</div>
+  <div class="tab" data-t="budget"><span class="ico">💴</span>预算</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== 行程数据 ====================
+const DAYS = [
+{id:0, emoji:'🚄', title:'Day 0 · 9/10(五) 赴上海过夜', items:[
+  {t:'18:00', b:'下班出发', d:'回家取行李(提前一晚收好),去高铁站', nav:''},
+  {t:'19:00', b:'高铁赴上海', d:'宁波→上海虹桥,约2.5小时,票提前网上买', nav:'上海虹桥站'},
+  {t:'22:00', b:'地铁2号线→浦东', d:'虹桥→川沙/祝桥方向,约1.5小时', nav:'上海浦东国际机场'},
+  {t:'23:00', b:'机场酒店入住', d:'含免费班车的连锁酒店,问清首班车时间,早睡!', nav:''},
+]},
+{id:1, emoji:'✈️', title:'Day 1 · 9/11(六) 飞大阪·道顿堀初夜', items:[
+  {t:'06:00', b:'酒店班车→浦东T2', d:'2人共用1箱,用买了行李额的人值机托运', nav:'上海浦东国际机场T2航站楼'},
+  {t:'08:05', b:'起飞 春秋9C6575', d:'上海→大阪,飞行2小时15分', nav:''},
+  {t:'11:20', b:'落地关西机场', d:'入境约45分,便利店买饭团垫肚子', nav:'关西国际机场'},
+  {t:'12:30', b:'南海电铁→难波', d:'空港急行,43分,¥970', nav:'难波站'},
+  {t:'14:00', b:'午餐:章鱼烧!', d:'くれおーる道顿堀本店——姐姐第一口章鱼', nav:'たこ焼きくれおーる道頓堀本店'},
+  {t:'15:00', b:'道顿堀川漫步', d:'+心斋桥筋初逛,只看不买', nav:'道顿堀'},
+  {t:'18:30', b:'晚餐:串炸元祖だるま', d:'法善寺横丁店,蘸酱只能蘸一次!', nav:'元祖串かつだるま法善寺横丁店'},
+  {t:'20:00', b:'格力高夜景打卡', d:'经典机位在戎桥南侧', nav:'戎桥格力高广告牌'},
+]},
+{id:2, emoji:'🏯', title:'Day 2 · 9/12(日) 大阪城·看包', items:[
+  {t:'09:00', b:'大阪城公园+天守阁', d:'谷町四丁目1-B/9号口步行10分,天守阁¥600', nav:'大阪城天守阁'},
+  {t:'12:00', b:'午餐:大阪烧千房', d:'全熟铁板,道顿堀', nav:'千房道顿堀店'},
+  {t:'14:00', b:'大丸心斋桥看包试背', d:'记款式价格,9/18统一买;药妆先记价别买', nav:'大丸心斋桥店本馆'},
+  {t:'18:30', b:'晚餐:矶丸水产', d:'姐姐→刺身拼盘烤扇贝;你→烤鱼烤牛炒面', nav:'磯丸水産難波店'},
+]},
+{id:3, emoji:'🎢', title:'Day 3 · 9/13(一) USJ整日', items:[
+  {t:'07:00', b:'出发,开园前1小时到', d:'JR难波→今宫→西九条→环球城,约25分', nav:'大阪环球影城'},
+  {t:'08:00', b:'入园!', d:'App抢任天堂整理券→哈利波特→玛利欧赛车', nav:'Universal Studios Japan'},
+  {t:'12:30', b:'园区午餐', d:'奇诺比奥咖啡(需拿号)或哈利波特三根扫帚+黄油啤酒', nav:''},
+  {t:'19:30', b:'出园回难波', d:'避开闭园人流,晚餐拉面/牛丼', nav:'JR环球城站'},
+]},
+{id:4, emoji:'⛩️', title:'Day 4 · 9/14(二) 黑门市场→京都清水寺', items:[
+  {t:'09:00', b:'黑门市场海鲜早午餐', d:'姐姐→黑门三平刺身/海胆;你→烤海鲜串/和牛串', nav:'黑门市场'},
+  {t:'11:00', b:'移师京都', d:'御堂筋线→梅田→JR新快速28分,京都站寄存行李', nav:'京都站'},
+  {t:'14:00', b:'清水寺', d:'巴士206/100路五条坂下,步行10分,¥500', nav:'清水寺'},
+  {t:'15:30', b:'二宁坂·三宁坂', d:'石板坡道,抹茶甜点边逛边吃', nav:'二宁坂'},
+  {t:'16:15', b:'八坂神社·圆山公园', d:'免费,朱红大门', nav:'八坂神社'},
+  {t:'17:00', b:'祇园花见小路·鸭川', d:'傍晚有几率遇艺伎', nav:'花见小路'},
+  {t:'18:30', b:'晚餐:四条河原町', d:'汤豆腐/天妇罗/一兰', nav:'四条河原町'},
+]},
+{id:5, emoji:'🎋', title:'Day 5 · 9/15(三·中秋) 岚山一日', items:[
+  {t:'09:00', b:'出发', d:'JR嵯峨野线→嵯峨岚山15分,南口步行10分', nav:'嵯峨岚山站'},
+  {t:'09:30', b:'竹林小径', d:'早去人少,光线最美', nav:'岚山竹林小径'},
+  {t:'10:15', b:'野宫神社', d:'竹林尽头的小神社,姻缘', nav:'野宫神社'},
+  {t:'10:45', b:'天龙寺庭园', d:'世界遗产枯山水,¥500', nav:'天龙寺'},
+  {t:'12:00', b:'午餐:汤豆腐/荞麦', d:'よしむら荞麦有热汤款', nav:'よしむら蕎麦嵐山'},
+  {t:'13:30', b:'渡月桥打卡', d:'岚山地标', nav:'渡月桥'},
+  {t:'14:30', b:'岚山商店街', d:'老松、中村藤吉岚山店买抹茶手信', nav:'岚山商店街'},
+]},
+{id:6, emoji:'🦌', title:'Day 6 · 9/16(四) 奈良一日', items:[
+  {t:'08:30', b:'出发', d:'JRみやこ路快速→JR奈良45分,东口出', nav:'JR奈良站'},
+  {t:'10:00', b:'奈良公园喂鹿', d:'鹿仙贝¥200/捆,别逗鹿;兴福寺五重塔', nav:'奈良公园'},
+  {t:'11:30', b:'东大寺大佛殿', d:'世界最大木造建筑,¥800', nav:'东大寺大佛殿'},
+  {t:'13:00', b:'春日大社', d:'千灯万灯笼,本殿¥500外围免费', nav:'春日大社'},
+  {t:'14:00', b:'午餐:志津香釜饭', d:'你点鸡肉/鳗鱼全熟,姐姐海鲜釜饭', nav:'志津香釜飯奈良'},
+  {t:'15:30', b:'奈良町老街', d:'大佛布丁、平宗柿叶寿司(鲑鱼给姐姐)', nav:'平宗柿叶寿司'},
+]},
+{id:7, emoji:'🍵', title:'Day 7 · 9/17(五) 宇治+京都Citywalk', items:[
+  {t:'08:00', b:'(可选)稻荷千本鸟居', d:'JR稻荷5分出站即到,想睡懒觉就跳过', nav:'伏见稻荷大社'},
+  {t:'10:30', b:'平等院', d:'凤凰堂+凤翔馆¥700,内部+¥300先着顺', nav:'平等院凤凰堂'},
+  {t:'12:30', b:'午餐:中村藤吉本店', d:'抹茶荞麦+巴菲,先取号再逛表参道', nav:'中村藤吉本店'},
+  {t:'14:00', b:'宇治川散步', d:'宇治上神社(可选)', nav:'宇治川'},
+  {t:'15:30', b:'京都Citywalk', d:'锦市场(17点前)→鸭川→先斗町', nav:'锦市场'},
+  {t:'19:00', b:'晚餐:回转寿司むさし', d:'三条店;姐姐三文鱼,你炙り+玉子', nav:'回转寿司むさし三条店'},
+]},
+{id:8, emoji:'🛍️', title:'Day 8 · 9/18(六) 大阪买包+药妆', items:[
+  {t:'08:30', b:'JR京都→大阪→难波', d:'新快速28分+御堂筋线,寄存行李', nav:'难波站'},
+  {t:'10:00', b:'大丸心斋桥:姐姐买包!', d:'9/12试好的款直奔专柜;三连休人多,开门就去', nav:'大丸心斋桥店本馆'},
+  {t:'11:30', b:'心斋桥药妆大采购', d:'大国/SUNDRUG/松本清比价,支付宝优惠券', nav:'心斋桥筋商店街'},
+  {t:'13:00', b:'午餐:大起水产回转寿司', d:'姐姐三文鱼最后吃一波¥110-150/盘', nav:'大起水产回转寿司道顿堀店'},
+  {t:'13:45', b:'午后Citywalk', d:'道顿堀→戎桥→法善寺横丁;(可选)通天阁新世界', nav:'通天阁'},
+  {t:'16:30', b:'难波酒店入住', d:'9/18晚,提前订好', nav:''},
+  {t:'18:30', b:'收官晚餐', d:'道顿堀,没吃够的再来一顿', nav:'道顿堀'},
+  {t:'20:30', b:'收拾行李+称重', d:'药妆放托运箱≤20kg,包随身不托运', nav:''},
+]},
+{id:9, emoji:'🛫', title:'Day 9 · 9/19(日) 休闲收尾·返程', items:[
+  {t:'09:00', b:'道顿堀清晨散步', d:'白天版格力高打卡,缺啥便利店补货', nav:'道顿堀'},
+  {t:'10:30', b:'南海电铁→关西机场', d:'43分,¥970;三连休人多宁早勿晚', nav:'关西国际机场'},
+  {t:'11:45', b:'机场退税!', d:'先退税再托运(免税新政,托运行李前)', nav:'关西国际机场'},
+  {t:'12:30', b:'值机托运+出境免税店', d:'Royce、白色恋人、东京香蕉', nav:''},
+  {t:'15:00', b:'起飞 春秋9C6566', d:'大阪→上海浦东16:30', nav:''},
+  {t:'19:50', b:'虹桥高铁→宁波', d:'约22:30到家,9/20正常上班', nav:'上海虹桥站'},
+]},
+];
+
+// ==================== 渲染行程 ====================
+const dayChips=document.getElementById('dayChips');
+const dayDetail=document.getElementById('dayDetail');
+let curDay=1;
+function navUrl(q, apple){
+  if(!q) return '';
+  const g='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+  const a='https://maps.apple.com/?q='+encodeURIComponent(q);
+  return apple? a : g;
+}
+function renderChips(){
+  dayChips.innerHTML=DAYS.map(d=>`<div class="day-chip ${d.id===curDay?'active':''}" data-d="${d.id}">${d.emoji} ${d.id===0?'D0':'D'+d.id}</div>`).join('');
+  dayChips.querySelectorAll('.day-chip').forEach(c=>c.onclick=()=>{curDay=+c.dataset.d;renderChips();renderDay();window.scrollTo({top:0,behavior:'smooth'});});
+}
+function renderDay(){
+  const d=DAYS.find(x=>x.id===curDay);
+  dayDetail.innerHTML=`<div class="card"><div class="bd">
+    <div class="day-title">${d.emoji} ${d.title}</div>
+    <div class="timeline">${d.items.map(it=>`
+      <div class="item">
+        <div class="t">${it.t}</div>
+        <div class="c"><b>${it.b}</b><div class="d">${it.d}</div>
+        ${it.nav?`<div class="navrow"><a class="navbtn g" href="${navUrl(it.nav)}" target="_blank">🗺️ Google导航</a><a class="navbtn a" href="${navUrl(it.nav,1)}" target="_blank">🍎 苹果地图</a></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div></div></div>`;
+}
+renderChips();renderDay();
+
+// ==================== 清单 ====================
+const CHECKGROUPS=[
+['🧳 随身证件',['护照','签证页复印件','身份证','机票行程单(手机)','酒店预订单(手机)','现金日元+零钱包','西瓜卡(手机钱包)','eSIM/流量卡']],
+['🎒 行李(2人共用1箱)',['夏装(9月大阪约25-30℃)','换洗内衣袜子','薄外套1件(空调房/晚凉)','拖鞋','洗漱用品','充电宝≤20000mAh(随身!)','充电线+转换头(日本两头扁插通用)','雨衣/折叠伞','自拍杆','药品(感冒/肠胃/创可贴)','折叠购物袋']],
+['📋 行前任务',['订机票(2-4月,最晚618)','订酒店(6-7月)','办签证(7月上中旬)','买USJ门票(7月中-8月)','买保险+流量卡(9月上旬)','注册Visit Japan Web(9月上旬)','预约银行换日元','订9/10高铁票(9/8前)','订上海机场酒店','买手提弹簧秤']],
+['🛍️ 购物备忘',['姐姐:试背的包(9/12记的款)','药妆(同店凑¥5000)','抹茶手信(中村藤吉/老松)','Royce/白色恋人/东京香蕉(机场)','退税商品集中放+收据装文件袋','称重:托运≤20kg']],
+];
+function renderCheck(){
+  const wrap=document.getElementById('checkList');
+  wrap.innerHTML=CHECKGROUPS.map((g,gi)=>`
+    <div class="check-grp"><div class="gt">${g[0]}</div>
+    ${g[1].map((x,xi)=>`<label class="ck"><input type="checkbox" data-k="${gi}-${xi}"><span>${x}</span></label>`).join('')}
+    </div>`).join('');
+  const boxes=[...wrap.querySelectorAll('input')];
+  const store=JSON.parse(localStorage.getItem('checkState')||'{}');
+  boxes.forEach(b=>{ b.checked=!!store[b.dataset.k];
+    b.onchange=()=>{store[b.dataset.k]=b.checked;localStorage.setItem('checkState',JSON.stringify(store));updProg();};
+    if(b.checked)b.nextElementSibling.classList.add('done');
+    b.addEventListener('change',()=>b.nextElementSibling.classList.toggle('done',b.checked));
+  });
+  updProg();
+  function updProg(){
+    const n=boxes.filter(b=>b.checked).length;
+    document.getElementById('progBar').style.width=(n/boxes.length*100)+'%';
+    document.getElementById('progText').textContent=`${n}/${boxes.length} 已勾选`;
+  }
+}
+renderCheck();
+
+// ==================== 汇率 ====================
+const RATE=0.043; // 1日元=0.043元
+const j=document.getElementById('inJpy'), c=document.getElementById('inCny');
+j.oninput=()=>{ if(j.value!=='') c.value=(j.value*RATE).toFixed(1); else c.value=''; };
+c.oninput=()=>{ if(c.value!=='') j.value=Math.round(c.value/RATE); else j.value=''; };
+
+// ==================== 日语短语 ====================
+const PHRASES=[
+['こんにちは','你好'],
+['ありがとうございます','谢谢'],
+['すみません','不好意思/借过'],
+['お会計お願いします','结账'],
+['いくらですか','多少钱'],
+['これ、見せてください','请给我看看这个'],
+['色違いはありますか','有其他颜色吗'],
+['サーモンをください','请给我三文鱼'],
+['生ものは食べられません','我不吃生的'],
+['火を通した料理でお願いします','请做熟的食物'],
+['中国語のメニューはありますか','有中文菜单吗'],
+['トイレ','卫生间'],
+['免税','免税'],
+];
+const pl=document.getElementById('phraseList');
+pl.innerHTML=PHRASES.map(p=>`<div class="phrase" data-j="${p[0]}"><div><div class="jp">${p[0]}</div><div class="zh">${p[1]}</div></div><span style="color:#bbb;font-size:12px">复制</span></div>`).join('');
+pl.querySelectorAll('.phrase').forEach(el=>el.onclick=()=>{
+  navigator.clipboard.writeText(el.dataset.j).then(()=>toast('已复制:'+el.dataset.j)).catch(()=>toast('复制失败'));
+});
+
+// ==================== 预算 ====================
+const BUDGET=[
+['机票(春秋往返)','2,054'],['行李额(2人共用1人)','约380'],['宁波⇄上海高铁','300'],['上海机场酒店1晚','150-250'],['签证','1,000-1,400'],['日本酒店8晚','1,900-3,250'],['USJ门票','390-435'],['当地交通','300-400'],['餐饮(9天)','2,000-2,500'],['景点门票','250-400'],['流量卡+保险','120-210'],['合计','约8,800-11,600'],
+];
+document.getElementById('budgetTable').innerHTML='<tr><th>项目</th><th>人均(元)</th></tr>'+BUDGET.map((r,i)=>`<tr${i===BUDGET.length-1?' style="font-weight:700;background:var(--light)"':''}><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+
+// ==================== Tab切换 ====================
+document.querySelectorAll('.bottom .tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.bottom .tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+t.dataset.t).classList.add('active');
+  window.scrollTo({top:0});
+});
+
+// ==================== 倒计时 ====================
+function countdown(){
+  const start=new Date('2027-09-10T18:00:00+08:00');
+  const now=new Date();
+  const diff=start-now;
+  if(diff<=0){document.getElementById('countdown').textContent='已出发,玩得开心!';return;}
+  const d=Math.floor(diff/86400000);
+  document.getElementById('countdown').textContent=`距离出发还有 ${d} 天`;
+}
+countdown();
+
+// ==================== Toast ====================
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1600);
+}
+</script>
+</body>
+</html>
