@@ -36,10 +36,39 @@ main{padding:12px;max-width:640px;margin:0 auto}
 .item .c b{font-weight:600;display:block;font-size:14.5px}
 .item .c .d{font-size:13px;color:#555;margin-top:2px}
 .item .c .m{font-size:12px;color:var(--gray);margin-top:2px}
+.pname{cursor:pointer}
+.pname:active{opacity:.65}
+.pico{font-size:11px;margin-left:3px;background:var(--light);border-radius:8px;padding:1px 6px;vertical-align:1px}
+.tk{display:inline-block;background:#fef9e7;color:#b9770e;border:1px solid #f5e6c8;border-radius:6px;padding:1px 8px;font-size:12px;margin-top:4px}
 .navrow{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
 .navbtn{display:inline-flex;align-items:center;gap:4px;border:none;border-radius:14px;padding:4px 12px;font-size:12.5px;cursor:pointer;text-decoration:none}
 .navbtn.g{background:var(--light);color:var(--blue)}
 .navbtn.a{background:#f5f5f5;color:#333}
+/* 介绍弹层 */
+.sheet-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;align-items:flex-end}
+.sheet-mask.show{display:flex}
+.sheet{background:#fff;width:100%;max-width:640px;margin:0 auto;border-radius:16px 16px 0 0;max-height:80vh;display:flex;flex-direction:column;animation:up .25s ease}
+@keyframes up{from{transform:translateY(50px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.sheet .grab{width:40px;height:4px;background:#ddd;border-radius:2px;margin:8px auto 0;flex:0 0 auto}
+.sheet-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 16px 2px;flex:0 0 auto}
+.sheet-hd .cat{font-size:11px;color:var(--blue2);background:var(--light);border-radius:10px;padding:2px 8px;display:inline-block}
+.sheet-hd .nm{font-size:18px;font-weight:700;margin-top:5px}
+.sheet-x{border:none;background:#f2f2f2;border-radius:50%;width:30px;height:30px;font-size:13px;cursor:pointer;flex:0 0 auto}
+.sheet-bd{padding:4px 16px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sheet-bd .intro{font-size:14px;color:#333;padding:8px 0 2px}
+.sheet-row{display:flex;gap:8px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.sheet-row:last-child{border-bottom:none}
+.sheet-row .k{flex:0 0 74px;color:var(--blue);font-weight:600}
+.sheet-ft{display:flex;gap:10px;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);flex:0 0 auto}
+.sheet-ft .navbtn{flex:1;justify-content:center;padding:8px 0;font-size:14px}
+/* 美食列表 */
+.food-grp .gt{font-size:13px;color:var(--blue);font-weight:600;margin:12px 14px 2px}
+.food-row{padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.food-row:last-child{border-bottom:none}
+.food-row:active{background:var(--light)}
+.food-row .fn{font-size:14.5px;font-weight:600}
+.food-row .ft{font-size:12px;color:var(--gray);margin-top:2px}
+.food-row .fp{flex:0 0 auto;font-size:12px;color:var(--accent);font-weight:600;text-align:right;max-width:45%}
 .check-grp{margin-bottom:6px}
 .check-grp .gt{font-size:13px;color:var(--blue);font-weight:600;margin:10px 2px 4px}
 label.ck{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid #f2f5f8;cursor:pointer;font-size:14px}
@@ -70,7 +99,7 @@ table.bd2 th{background:var(--light);color:var(--blue)}
 .bottom .tab{flex:1;text-align:center;padding:8px 0 6px;font-size:11px;color:#999;cursor:pointer}
 .bottom .tab .ico{display:block;font-size:20px;line-height:1.3}
 .bottom .tab.active{color:var(--blue);font-weight:600}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:13px;padding:8px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:13px;padding:8px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:60}
 .toast.show{opacity:1}
 </style>
 </head>
@@ -94,8 +123,27 @@ table.bd2 th{background:var(--light);color:var(--blue)}
         <div style="font-size:12px;color:var(--gray);margin-top:6px">🏨 大阪难波4晚(9/11-14)→京都站前3晚(9/15-17)→大阪1晚(9/18) · 上海1晚(9/10)</div>
       </div>
     </div>
+    <div class="card">
+      <div class="hd">💡 小提示</div>
+      <div class="bd" style="font-size:13px;color:#555">点行程里带 <span class="pico">📖</span> 的名字可看景点介绍、门票和开放时间;带🎫的行显示了门票价格(日元≈人民币)。</div>
+    </div>
     <div class="day-chip-bar" id="dayChips"></div>
     <div id="dayDetail"></div>
+  </div>
+
+  <!-- ============ 美食 ============ -->
+  <div class="tab-page" id="page-food">
+    <div class="card">
+      <div class="hd">🍜 美食清单(点开看详情)</div>
+      <div class="bd" style="padding:0" id="foodList"></div>
+    </div>
+    <div class="card">
+      <div class="hd">🗣️ 点餐技巧</div>
+      <div class="bd">
+        <div style="font-size:13.5px">🍣 <b>姐姐点海鲜</b>:サーモンください(请给我三文鱼)、たこをください(请给我章鱼)</div>
+        <div style="font-size:13.5px;margin-top:6px">🔥 <b>你不吃生食</b>:火を通した料理がいいです(请做熟的食物)、生ものは食べられません(不能吃生的)</div>
+      </div>
+    </div>
   </div>
 
   <!-- ============ 清单 ============ -->
@@ -142,6 +190,13 @@ table.bd2 th{background:var(--light);color:var(--blue)}
   <!-- ============ 预算 ============ -->
   <div class="tab-page" id="page-budget">
     <div class="card">
+      <div class="hd">🎫 门票明细(1人)</div>
+      <div class="bd">
+        <table class="bd2" id="ticketTable"></table>
+        <div style="font-size:12px;color:var(--gray);margin-top:8px">合计(不含USJ、不含可选)≈ ¥3,600日元 ≈ ¥155元/人;⚠️USJ必须提前线上买,其余全部现场购票</div>
+      </div>
+    </div>
+    <div class="card">
       <div class="hd">💴 预算总表(人均·人民币)</div>
       <div class="bd">
         <table class="bd2" id="budgetTable"></table>
@@ -153,10 +208,28 @@ table.bd2 th{background:var(--light);color:var(--blue)}
 
 <div class="bottom">
   <div class="tab active" data-t="plan"><span class="ico">📅</span>行程</div>
+  <div class="tab" data-t="food"><span class="ico">🍜</span>美食</div>
   <div class="tab" data-t="check"><span class="ico">✅</span>清单</div>
   <div class="tab" data-t="tools"><span class="ico">🧰</span>工具</div>
   <div class="tab" data-t="budget"><span class="ico">💴</span>预算</div>
 </div>
+
+<!-- 景点/美食介绍弹层 -->
+<div class="sheet-mask" id="sheetMask">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sheet-hd">
+      <div>
+        <span class="cat" id="shCat"></span>
+        <div class="nm" id="shNm"></div>
+      </div>
+      <button class="sheet-x" id="sheetX">✕</button>
+    </div>
+    <div class="sheet-bd" id="shBd"></div>
+    <div class="sheet-ft" id="shFt"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -171,77 +244,212 @@ const DAYS = [
 {id:1, emoji:'✈️', title:'Day 1 · 9/11(六) 飞大阪·道顿堀初夜', items:[
   {t:'06:00', b:'酒店班车→浦东T2', d:'2人共用1箱,用买了行李额的人值机托运', nav:'上海浦东国际机场T2航站楼'},
   {t:'08:05', b:'起飞 春秋9C6575', d:'上海→大阪,飞行2小时15分', nav:''},
-  {t:'11:20', b:'落地关西机场', d:'入境约45分,便利店买饭团垫肚子', nav:'关西国际机场'},
+  {t:'11:20', b:'落地关西机场', d:'入境约45分,便利店买饭团垫肚子', nav:'关西国际机场', poi:'kix'},
   {t:'12:30', b:'南海电铁→难波', d:'空港急行,43分,¥970', nav:'难波站'},
-  {t:'14:00', b:'午餐:章鱼烧!', d:'くれおーる道顿堀本店——姐姐第一口章鱼', nav:'たこ焼きくれおーる道頓堀本店'},
-  {t:'15:00', b:'道顿堀川漫步', d:'+心斋桥筋初逛,只看不买', nav:'道顿堀'},
-  {t:'18:30', b:'晚餐:串炸元祖だるま', d:'法善寺横丁店,蘸酱只能蘸一次!', nav:'元祖串かつだるま法善寺横丁店'},
-  {t:'20:00', b:'格力高夜景打卡', d:'经典机位在戎桥南侧', nav:'戎桥格力高广告牌'},
+  {t:'14:00', b:'午餐:章鱼烧!', d:'くれおーる道顿堀本店——姐姐第一口章鱼', nav:'たこ焼きくれおーる道頓堀本店', poi:'kureoru'},
+  {t:'15:00', b:'道顿堀川漫步', d:'+心斋桥筋初逛,只看不买', nav:'道顿堀', poi:'dotonbori'},
+  {t:'18:30', b:'晚餐:串炸元祖だるま', d:'法善寺横丁店,蘸酱只能蘸一次!', nav:'元祖串かつだるま法善寺横丁店', poi:'daruma'},
+  {t:'20:00', b:'格力高夜景打卡', d:'经典机位在戎桥南侧', nav:'戎桥格力高广告牌', poi:'glico'},
 ]},
 {id:2, emoji:'🏯', title:'Day 2 · 9/12(日) 大阪城·看包', items:[
-  {t:'09:00', b:'大阪城公园+天守阁', d:'谷町四丁目1-B/9号口步行10分,天守阁¥600', nav:'大阪城天守阁'},
-  {t:'12:00', b:'午餐:大阪烧千房', d:'全熟铁板,道顿堀', nav:'千房道顿堀店'},
-  {t:'14:00', b:'大丸心斋桥看包试背', d:'记款式价格,9/18统一买;药妆先记价别买', nav:'大丸心斋桥店本馆'},
-  {t:'18:30', b:'晚餐:矶丸水产', d:'姐姐→刺身拼盘烤扇贝;你→烤鱼烤牛炒面', nav:'磯丸水産難波店'},
+  {t:'09:00', b:'大阪城公园+天守阁', d:'谷町四丁目1-B/9号口步行10分', nav:'大阪城天守阁', poi:'osakacastle'},
+  {t:'12:00', b:'午餐:大阪烧千房', d:'全熟铁板,道顿堀', nav:'千房道顿堀店', poi:'chibo'},
+  {t:'14:00', b:'大丸心斋桥看包试背', d:'记款式价格,9/18统一买;药妆先记价别买', nav:'大丸心斋桥店本馆', poi:'daimaru'},
+  {t:'18:30', b:'晚餐:矶丸水产', d:'姐姐→刺身拼盘烤扇贝;你→烤鱼烤牛炒面', nav:'磯丸水産難波店', poi:'isomaru'},
 ]},
 {id:3, emoji:'🎢', title:'Day 3 · 9/13(一) USJ整日', items:[
-  {t:'07:00', b:'出发,开园前1小时到', d:'JR难波→今宫→西九条→环球城,约25分', nav:'大阪环球影城'},
-  {t:'08:00', b:'入园!', d:'App抢任天堂整理券→哈利波特→玛利欧赛车', nav:'Universal Studios Japan'},
+  {t:'07:00', b:'出发,开园前1小时到', d:'JR难波→今宫→西九条→环球城,约25分', nav:'大阪环球影城', poi:'usj'},
+  {t:'08:00', b:'入园!', d:'App抢任天堂整理券→哈利波特→玛利欧赛车', nav:'Universal Studios Japan', poi:'usj'},
   {t:'12:30', b:'园区午餐', d:'奇诺比奥咖啡(需拿号)或哈利波特三根扫帚+黄油啤酒', nav:''},
   {t:'19:30', b:'出园回难波', d:'避开闭园人流,晚餐拉面/牛丼', nav:'JR环球城站'},
 ]},
 {id:4, emoji:'⛩️', title:'Day 4 · 9/14(二) 黑门市场→京都清水寺', items:[
-  {t:'09:00', b:'黑门市场海鲜早午餐', d:'姐姐→黑门三平刺身/海胆;你→烤海鲜串/和牛串', nav:'黑门市场'},
+  {t:'09:00', b:'黑门市场海鲜早午餐', d:'姐姐→黑门三平刺身/海胆;你→烤海鲜串/和牛串', nav:'黑门市场', poi:'kuromon'},
   {t:'11:00', b:'移师京都', d:'御堂筋线→梅田→JR新快速28分,京都站寄存行李', nav:'京都站'},
-  {t:'14:00', b:'清水寺', d:'巴士206/100路五条坂下,步行10分,¥500', nav:'清水寺'},
-  {t:'15:30', b:'二宁坂·三宁坂', d:'石板坡道,抹茶甜点边逛边吃', nav:'二宁坂'},
-  {t:'16:15', b:'八坂神社·圆山公园', d:'免费,朱红大门', nav:'八坂神社'},
-  {t:'17:00', b:'祇园花见小路·鸭川', d:'傍晚有几率遇艺伎', nav:'花见小路'},
-  {t:'18:30', b:'晚餐:四条河原町', d:'汤豆腐/天妇罗/一兰', nav:'四条河原町'},
+  {t:'14:00', b:'清水寺', d:'巴士206/100路五条坂下,步行10分', nav:'清水寺', poi:'kiyomizu'},
+  {t:'15:30', b:'二宁坂·三宁坂', d:'石板坡道,抹茶甜点边逛边吃', nav:'二宁坂', poi:'ninnenzaka'},
+  {t:'16:15', b:'八坂神社·圆山公园', d:'免费,朱红大门', nav:'八坂神社', poi:'yasaka'},
+  {t:'17:00', b:'祇园花见小路·鸭川', d:'傍晚有几率遇艺伎', nav:'花见小路', poi:'gion'},
+  {t:'18:30', b:'晚餐:四条河原町', d:'汤豆腐/天妇罗/一兰', nav:'四条河原町', poi:'shijo'},
 ]},
 {id:5, emoji:'🎋', title:'Day 5 · 9/15(三·中秋) 岚山一日', items:[
   {t:'09:00', b:'出发', d:'JR嵯峨野线→嵯峨岚山15分,南口步行10分', nav:'嵯峨岚山站'},
-  {t:'09:30', b:'竹林小径', d:'早去人少,光线最美', nav:'岚山竹林小径'},
-  {t:'10:15', b:'野宫神社', d:'竹林尽头的小神社,姻缘', nav:'野宫神社'},
-  {t:'10:45', b:'天龙寺庭园', d:'世界遗产枯山水,¥500', nav:'天龙寺'},
-  {t:'12:00', b:'午餐:汤豆腐/荞麦', d:'よしむら荞麦有热汤款', nav:'よしむら蕎麦嵐山'},
-  {t:'13:30', b:'渡月桥打卡', d:'岚山地标', nav:'渡月桥'},
+  {t:'09:30', b:'竹林小径', d:'早去人少,光线最美', nav:'岚山竹林小径', poi:'bamboo'},
+  {t:'10:15', b:'野宫神社', d:'竹林尽头的小神社,姻缘', nav:'野宫神社', poi:'nonomiya'},
+  {t:'10:45', b:'天龙寺庭园', d:'世界遗产枯山水', nav:'天龙寺', poi:'tenryuji'},
+  {t:'12:00', b:'午餐:汤豆腐/荞麦', d:'よしむら荞麦有热汤款', nav:'よしむら蕎麦嵐山', poi:'yoshimura'},
+  {t:'13:30', b:'渡月桥打卡', d:'岚山地标', nav:'渡月桥', poi:'togetsukyo'},
   {t:'14:30', b:'岚山商店街', d:'老松、中村藤吉岚山店买抹茶手信', nav:'岚山商店街'},
 ]},
 {id:6, emoji:'🦌', title:'Day 6 · 9/16(四) 奈良一日', items:[
   {t:'08:30', b:'出发', d:'JRみやこ路快速→JR奈良45分,东口出', nav:'JR奈良站'},
-  {t:'10:00', b:'奈良公园喂鹿', d:'鹿仙贝¥200/捆,别逗鹿;兴福寺五重塔', nav:'奈良公园'},
-  {t:'11:30', b:'东大寺大佛殿', d:'世界最大木造建筑,¥800', nav:'东大寺大佛殿'},
-  {t:'13:00', b:'春日大社', d:'千灯万灯笼,本殿¥500外围免费', nav:'春日大社'},
-  {t:'14:00', b:'午餐:志津香釜饭', d:'你点鸡肉/鳗鱼全熟,姐姐海鲜釜饭', nav:'志津香釜飯奈良'},
-  {t:'15:30', b:'奈良町老街', d:'大佛布丁、平宗柿叶寿司(鲑鱼给姐姐)', nav:'平宗柿叶寿司'},
+  {t:'10:00', b:'奈良公园喂鹿', d:'兴福寺五重塔就在旁边', nav:'奈良公园', poi:'narapark'},
+  {t:'11:30', b:'东大寺大佛殿', d:'世界最大木造建筑', nav:'东大寺大佛殿', poi:'todaiji'},
+  {t:'13:00', b:'春日大社', d:'千灯万灯笼,本殿¥500外围免费', nav:'春日大社', poi:'kasuga'},
+  {t:'14:00', b:'午餐:志津香釜饭', d:'你点鸡肉/鳗鱼全熟,姐姐海鲜釜饭', nav:'志津香釜飯奈良', poi:'shizuka'},
+  {t:'15:30', b:'奈良町老街', d:'大佛布丁、平宗柿叶寿司(鲑鱼给姐姐)', nav:'平宗柿叶寿司', poi:'hirasou'},
 ]},
 {id:7, emoji:'🍵', title:'Day 7 · 9/17(五) 宇治+京都Citywalk', items:[
-  {t:'08:00', b:'(可选)稻荷千本鸟居', d:'JR稻荷5分出站即到,想睡懒觉就跳过', nav:'伏见稻荷大社'},
-  {t:'10:30', b:'平等院', d:'凤凰堂+凤翔馆¥700,内部+¥300先着顺', nav:'平等院凤凰堂'},
-  {t:'12:30', b:'午餐:中村藤吉本店', d:'抹茶荞麦+巴菲,先取号再逛表参道', nav:'中村藤吉本店'},
+  {t:'08:00', b:'(可选)稻荷千本鸟居', d:'JR稻荷5分出站即到,想睡懒觉就跳过', nav:'伏见稻荷大社', poi:'fushimi'},
+  {t:'10:30', b:'平等院', d:'凤凰堂+凤翔馆,内部+¥300先着顺', nav:'平等院凤凰堂', poi:'byodoin'},
+  {t:'12:30', b:'午餐:中村藤吉本店', d:'抹茶荞麦+巴菲,先取号再逛表参道', nav:'中村藤吉本店', poi:'nakamura'},
   {t:'14:00', b:'宇治川散步', d:'宇治上神社(可选)', nav:'宇治川'},
-  {t:'15:30', b:'京都Citywalk', d:'锦市场(17点前)→鸭川→先斗町', nav:'锦市场'},
-  {t:'19:00', b:'晚餐:回转寿司むさし', d:'三条店;姐姐三文鱼,你炙り+玉子', nav:'回转寿司むさし三条店'},
+  {t:'15:30', b:'京都Citywalk', d:'锦市场(17点前)→鸭川→先斗町', nav:'锦市场', poi:'nishiki'},
+  {t:'19:00', b:'晚餐:回转寿司むさし', d:'三条店;姐姐三文鱼,你炙り+玉子', nav:'回转寿司むさし三条店', poi:'musashi'},
 ]},
 {id:8, emoji:'🛍️', title:'Day 8 · 9/18(六) 大阪买包+药妆', items:[
   {t:'08:30', b:'JR京都→大阪→难波', d:'新快速28分+御堂筋线,寄存行李', nav:'难波站'},
-  {t:'10:00', b:'大丸心斋桥:姐姐买包!', d:'9/12试好的款直奔专柜;三连休人多,开门就去', nav:'大丸心斋桥店本馆'},
+  {t:'10:00', b:'大丸心斋桥:姐姐买包!', d:'9/12试好的款直奔专柜;三连休人多,开门就去', nav:'大丸心斋桥店本馆', poi:'daimaru'},
   {t:'11:30', b:'心斋桥药妆大采购', d:'大国/SUNDRUG/松本清比价,支付宝优惠券', nav:'心斋桥筋商店街'},
-  {t:'13:00', b:'午餐:大起水产回转寿司', d:'姐姐三文鱼最后吃一波¥110-150/盘', nav:'大起水产回转寿司道顿堀店'},
-  {t:'13:45', b:'午后Citywalk', d:'道顿堀→戎桥→法善寺横丁;(可选)通天阁新世界', nav:'通天阁'},
+  {t:'13:00', b:'午餐:大起水产回转寿司', d:'姐姐三文鱼最后吃一波', nav:'大起水产回转寿司道顿堀店', poi:'daiki'},
+  {t:'13:45', b:'午后Citywalk', d:'道顿堀→戎桥→法善寺横丁;(可选)通天阁新世界', nav:'通天阁', poi:'tsutenkaku'},
   {t:'16:30', b:'难波酒店入住', d:'9/18晚,提前订好', nav:''},
-  {t:'18:30', b:'收官晚餐', d:'道顿堀,没吃够的再来一顿', nav:'道顿堀'},
+  {t:'18:30', b:'收官晚餐', d:'道顿堀,没吃够的再来一顿', nav:'道顿堀', poi:'dotonbori'},
   {t:'20:30', b:'收拾行李+称重', d:'药妆放托运箱≤20kg,包随身不托运', nav:''},
 ]},
 {id:9, emoji:'🛫', title:'Day 9 · 9/19(日) 休闲收尾·返程', items:[
-  {t:'09:00', b:'道顿堀清晨散步', d:'白天版格力高打卡,缺啥便利店补货', nav:'道顿堀'},
-  {t:'10:30', b:'南海电铁→关西机场', d:'43分,¥970;三连休人多宁早勿晚', nav:'关西国际机场'},
-  {t:'11:45', b:'机场退税!', d:'先退税再托运(免税新政,托运行李前)', nav:'关西国际机场'},
+  {t:'09:00', b:'道顿堀清晨散步', d:'白天版格力高打卡,缺啥便利店补货', nav:'道顿堀', poi:'dotonbori'},
+  {t:'10:30', b:'南海电铁→关西机场', d:'43分,¥970;三连休人多宁早勿晚', nav:'关西国际机场', poi:'kix'},
+  {t:'11:45', b:'机场退税!', d:'先退税再托运(免税新政,托运行李前)', nav:'关西国际机场', poi:'kix'},
   {t:'12:30', b:'值机托运+出境免税店', d:'Royce、白色恋人、东京香蕉', nav:''},
   {t:'15:00', b:'起飞 春秋9C6566', d:'大阪→上海浦东16:30', nav:''},
   {t:'19:50', b:'虹桥高铁→宁波', d:'约22:30到家,9/20正常上班', nav:'上海虹桥站'},
 ]},
+];
+
+// ==================== 景点/美食资料库 ====================
+// cat: spot景点 / food美食; tk:门票(行程里显示🎫小标签); hr:开放时间; tip:贴士; price:参考价
+const POIS={
+// ---- 景点 ----
+osakacastle:{cat:'spot', n:'大阪城天守阁', tk:'¥600 ≈ ¥26(公园免费)', hr:'9:00-17:00(最后入馆16:30)',
+  intro:'丰臣秀吉1583年建的大阪地标,现存天守为1931年重建。8层展望台可360°俯瞰大阪城公园,内部是历史博物馆。公园本身免费,护城河和石垣很出片。',
+  tip:'地铁谷町四丁目1-B/9号口出步行10分;售票机/窗口现场买,无需预约'},
+usj:{cat:'spot', n:'USJ大阪环球影城', tk:'¥8,900-9,900 ≈ ¥383-426 ⚠️必须提前线上买', hr:'一般8:30-21:00(常提前开门)',
+  intro:'亚洲最热门的主题乐园之一,拥有超级任天堂世界(玛利欧赛车)和哈利波特魔法世界两大王牌园区。9/13是周一工作日,人相对最少。',
+  tip:'官网usj.co.jp中文页/Klook/KKday提前约1-2个月买,⚠️门口已停售;平日快通可不买;入园先在App抢任天堂园区整理券'},
+kiyomizu:{cat:'spot', n:'清水寺', tk:'¥500 ≈ ¥22', hr:'6:00-18:00',
+  intro:'京都最古老的寺院之一(778年),悬空"清水舞台"由139根木柱支撑、未用一根钉子。舞台可眺望京都全景,音羽瀑布三道泉据说分别掌管学业、恋爱、健康。',
+  tip:'巴士206/100路五条坂下步行10分;清晨人少,傍晚有夕阳;二宁坂三宁坂在寺外免费逛'},
+fushimi:{cat:'spot', n:'伏见稻荷大社', tk:'免费', hr:'24小时开放',
+  intro:'千本鸟居的所在地,朱红色鸟居层层叠叠排成隧道,是京都最出片的画面之一。稻荷神主管生意兴隆,整座山都是社域。',
+  tip:'JR稻荷站出站即到;走完全程约2-3小时,建议走到半山腰折返;清晨人少光影最好'},
+bamboo:{cat:'spot', n:'岚山竹林小径', tk:'免费', hr:'全天',
+  intro:'京都最经典的画面:两侧高耸的竹子遮天蔽日,风吹过时沙沙作响。竹林小径不长,10-15分钟可走完,尽头就是野宫神社。',
+  tip:'早去人少;JR嵯峨岚山站南口步行10分;上午光线最好'},
+nonomiya:{cat:'spot', n:'野宫神社', tk:'免费', hr:'9:00-17:00左右',
+  intro:'竹林尽头的小神社,主姻缘,黑木鸟居是日本最古老样式的鸟居之一。《源氏物语》中光源氏也曾到访。',
+  tip:'求个姻缘御守,小姐姐会喜欢'},
+tenryuji:{cat:'spot', n:'天龙寺庭园', tk:'¥500 ≈ ¥22', hr:'8:30-17:00',
+  intro:'世界遗产,梦窗疏石设计的曹源池庭园,借景岚山,是京都最著名的庭园之一。寺北门直通竹林小径。',
+  tip:'法堂"云龙图"另¥500(可选,只买庭园票即可);竹林入口就在北门'},
+togetsukyo:{cat:'spot', n:'渡月桥', tk:'免费', hr:'全天',
+  intro:'岚山的地标木桥,名字取自"如渡月"的典故。桥下是保津川,远处岚山四季分明,拍照打卡第一机位。',
+  tip:'桥上人多,河岸旁角度更好;夏末初秋两岸绿意浓'},
+byodoin:{cat:'spot', n:'平等院', tk:'¥700 ≈ ¥30;凤凰堂内部另+¥300', hr:'庭园8:45-17:30;凤翔馆9:00-17:00',
+  intro:'1052年藤原氏修建的极乐净土庭园,凤凰堂就是10日元硬币背面的图案。凤翔馆藏有国宝凤凰和云中供养菩萨像。',
+  tip:'JR宇治站步行10分;凤凰堂内部9:10起先着顺(每20分50人),想进就开园前到;境内茶房"藤花"可吃茶点'},
+todaiji:{cat:'spot', n:'东大寺大佛殿', tk:'¥800 ≈ ¥34', hr:'4-10月 7:30-17:30',
+  intro:'世界最大的木造建筑,殿内15米高的卢舍那大佛非常震撼。奈良公园的鹿就在门前自由漫步。',
+  tip:'大佛殿+博物馆套票¥1,200,不看馆单买大佛殿即可'},
+kasuga:{cat:'spot', n:'春日大社', tk:'本殿 ¥500 ≈ ¥22(外围免费)', hr:'8:30-16:30',
+  intro:'1300年前创祀的奈良名社,3000座石灯笼和无数吊灯笼蔚为壮观。朱红色的社殿与鹿群同框是经典画面。',
+  tip:'只逛参道和石灯笼区免费;万灯笼一年只点几次'},
+narapark:{cat:'spot', n:'奈良公园', tk:'鹿仙贝 ¥200/捆 ≈ ¥9(公园免费)', hr:'全天',
+  intro:'奈良的鹿都是野生神鹿,公园内约1200头。买一捆鹿仙贝,小鹿会鞠躬讨食,超级治愈。',
+  tip:'只喂仙贝不逗鹿!鹿会顶人、抢塑料袋和地图;仙贝摊约9:00-16:00'},
+dotonbori:{cat:'spot', n:'道顿堀', tk:'免费', hr:'全天',
+  intro:'大阪美食与霓虹招牌的圣地,格力高广告牌、巨大的蟹道乐螃蟹招牌都在这里。河岸夜景比白天更热闹。',
+  tip:'章鱼烧、串炸、大阪烧都在这;拍格力高去戎桥南侧'},
+glico:{cat:'spot', n:'戎桥格力高广告牌', tk:'免费', hr:'全天(夜景更佳)',
+  intro:'奔跑的男人——格力高广告牌,大阪打卡第一机位。晚上霓虹亮起时最好看。',
+  tip:'经典机位在戎桥南侧栏杆边;和招牌同款pose拍一张'},
+kuromon:{cat:'spot', n:'黑门市场', tk:'免费进', hr:'约9:00-18:00(各店不同)',
+  intro:'"大阪厨房",全长约580米、170多家店铺。现开海胆、现切刺身、现烤蟹腿和和牛串,边走边吃就是正确打开方式。',
+  tip:'黑门三平是刺身名店;现金和IC卡都收;当早午餐吃最划算'},
+nishiki:{cat:'spot', n:'锦市场', tk:'免费进', hr:'约10:00-17:00(各店不同)',
+  intro:'"京都厨房",400年历史的狭长老市场街。三文鱼刺身杯、海鲜串、玉子烧串一路吃过去。',
+  tip:'多数店17点前后收摊,别太晚;从东门进离祇园近'},
+yasaka:{cat:'spot', n:'八坂神社', tk:'免费', hr:'24小时',
+  intro:'祇园的总社,朱红大门和灯笼阵列非常上镜。每年7月祇园祭在这里举行,平时是散步歇脚的好地方。',
+  tip:'晚上灯笼亮起后另有一番味道;圆山公园就在旁边'},
+gion:{cat:'spot', n:'祇园花见小路', tk:'免费', hr:'全天(傍晚最佳)',
+  intro:'京都最风雅的茶屋街,石板路两侧是町屋和茶屋。傍晚时分有几率遇到真正的艺伎。',
+  tip:'拍照别挡路、不追拍艺伎;旁边鸭川河岸散步很舒服'},
+ninnenzaka:{cat:'spot', n:'二宁坂·三宁坂', tk:'免费', hr:'全天',
+  intro:'清水寺下山必经的石板坡道,两侧町屋店铺卖抹茶甜点、和风小物。传说在这里摔倒会折寿,小心脚下。',
+  tip:'抹茶冰淇淋边走边吃;傍晚人少景美'},
+tsutenkaku:{cat:'spot', n:'通天阁·新世界', tk:'逛街免费;登塔约¥900 ≈ ¥39', hr:'登塔约10:00-19:30',
+  intro:'大阪老地标,新世界街区充满昭和复古味。塔下就是串炸一条街ジャンジャン横丁。',
+  tip:'地铁堺筋线惠美须町3号出口步行5分;串炸¥150-300/串,蘸酱只能蘸一次!'},
+daimaru:{cat:'spot', n:'大丸心斋桥店', tk:'-', hr:'约10:00-20:00',
+  intro:'心斋桥最大的百货之一,本馆品牌最全。买包流程:9/12试背记价→9/18开门就来直接买。',
+  tip:'按免税新政先付全额、机场统一退税,收据和商品一起留好;三连休人多,开门就去'},
+shijo:{cat:'spot', n:'四条河原町', tk:'免费', hr:'店铺约10:00-20:00',
+  intro:'京都最热闹的商圈,百货、药妆、餐饮集中。汤豆腐、天妇罗、一兰拉面都在附近。',
+  tip:'一兰河原町店常年排队,错峰去'},
+kix:{cat:'spot', n:'关西国际机场', tk:'-', hr:'全天',
+  intro:'填海造的人工岛机场,南海电铁43分直达难波。⚠️免税新政:先在安检前退税柜台办退税,再托运行李!',
+  tip:'退税柜台在值机托运之前办理;三连休人多,返程宁早勿晚'},
+// ---- 美食 ----
+kureoru:{cat:'food', n:'章鱼烧 くれおーる(道顿堀本店)', price:'¥800起 ≈ ¥34起', hr:'约11:00-23:00', tags:'熟食·两人都吃',
+  intro:'道顿堀人气章鱼烧老铺,外脆内软、章鱼块大。熟食,两人都能吃——姐姐的日本第一口章鱼烧就在这里。',
+  tip:'排队常有但走得快;一份6-8个,点原味+酱汁'},
+daruma:{cat:'food', n:'元祖串かつだるま(法善寺横丁)', price:'串炸 ¥150-300/串', hr:'约11:00-22:30', tags:'全熟·大阪名物',
+  intro:'大阪串炸元祖,金黄酥脆的串炸配特制蘸酱。⚠️蘸酱是公共的,只能蘸一次!',
+  tip:'点套餐更划算;姐姐加章鱼串,都是全熟'},
+chibo:{cat:'food', n:'千房(大阪烧·道顿堀)', price:'¥1,200起 ≈ ¥52起', hr:'约11:00-23:00', tags:'全熟·安全',
+  intro:'道顿堀最大的大阪烧连锁,座位多、上菜快,铁板全熟。',
+  tip:'就在道顿堀中心,逛累了随时进'},
+mizuno:{cat:'food', n:'美津の(大阪烧)', price:'¥1,200起 ≈ ¥52起', hr:'约11:00-22:00', tags:'全熟·米其林推荐',
+  intro:'米其林推荐的百年大阪烧老店,全程铁板全熟,不用担心生食。招牌是山药烧。',
+  tip:'饭点排队,错峰去;两人分一个再点小吃更划算'},
+isomaru:{cat:'food', n:'矶丸水产', price:'人均约¥2,000-3,000 ≈ ¥86-129', hr:'约11:00-次日5:00', tags:'姐姐海鲜·你吃烤物',
+  intro:'平价海鲜居酒屋连锁,难波/道顿堀周边都有店。姐姐→刺身拼盘、烤扇贝、烤章鱼;你→烤鱼、烤牛、炒面。',
+  tip:'晚市人多,可拿号;自己动手烤海鲜有趣'},
+daiki:{cat:'food', n:'大起水产回转寿司(道顿堀店)', price:'¥110-150/盘 ≈ ¥5-6/盘', hr:'约11:00-23:00', tags:'回转寿司·姐姐主场',
+  intro:'大阪回转寿司连锁,海鲜直送。姐姐三文鱼最后吃一波;你吃炙り三文鱼、玉子、天妇罗卷。',
+  tip:'道顿堀店上菜快;金枪鱼中トロ值得点'},
+kuromonsampei:{cat:'food', n:'黑门三平', price:'人均约¥2,000-3,000 ≈ ¥86-129', hr:'约9:00-18:00', tags:'姐姐海鲜·你吃烤串',
+  intro:'黑门市场最出名的海鲜店,现开海胆、现切刺身拼盘。姐姐的海鲜天堂,你点现烤蟹腿、和牛串。',
+  tip:'早上刚开门货最全;座位少,可边走边吃'},
+yoshimura:{cat:'food', n:'よしむら荞麦(岚山)', price:'约¥1,000-1,500 ≈ ¥43-65', hr:'约11:00-17:00', tags:'手打荞麦·有热汤款',
+  intro:'岚山手打荞麦面,有热汤款,不习惯冷荞麦也友好。庭院座位看竹林。',
+  tip:'中午排队,11点前到少等'},
+tofu:{cat:'food', n:'岚山汤豆腐', price:'套餐约¥1,500-2,500 ≈ ¥65-108', hr:'约11:00-17:00', tags:'清淡·全熟友好',
+  intro:'京都豆腐料理配京野菜小菜,清淡暖胃,全熟友好。竹林寺边的小店都有。',
+  tip:'套餐通常含小菜拼盘,一人一份刚好'},
+ichiran:{cat:'food', n:'一兰拉面(河原町店)', price:'约¥1,000起 ≈ ¥43起', hr:'24小时', tags:'拉面·全熟',
+  intro:'豚骨拉面代表,一人一格"味集中counter"体验独特。汤头浓郁,是熟的放心吃。',
+  tip:'常年排队,非饭点去;加面按铃'},
+ramenkoji:{cat:'food', n:'京都拉面小路(京都站10F)', price:'约¥900-1,200 ≈ ¥39-52', hr:'约11:00-22:00', tags:'拉面·全熟',
+  intro:'京都站10楼汇集10+家各地拉面名店,一条街吃遍日本拉面流派。',
+  tip:'车站楼上方便;豚骨/酱油/味噌都有,看图点单'},
+kaneyo:{cat:'food', n:'祇园かねよ(鳗鱼饭)', price:'约¥2,500-5,000 ≈ ¥108-215', hr:'约11:00-21:00', tags:'京都百年名店',
+  intro:'百年京风鳗鱼饭老铺,招牌"金丝丼"是厚蛋皮盖鳗鱼饭,颜值与美味兼具。',
+  tip:'午餐比晚餐便宜;河原町步行可达'},
+musashi:{cat:'food', n:'回转寿司 むさし(三条店)', price:'¥110-150/盘 ≈ ¥5-6/盘', hr:'约11:00-22:00', tags:'回转寿司·姐姐主场',
+  intro:'京都本地人气回转寿司。姐姐→三文鱼、章鱼、中トロ;你→炙り三文鱼、玉子、天妇罗卷。传送带上熟了才拿,不踩雷。',
+  tip:'饭点排队;想吃贵的直接点单,师傅现捏'},
+nakamura:{cat:'food', n:'中村藤吉本店(宇治)', price:'人均约¥1,500-2,000 ≈ ¥65-86', hr:'约10:00-17:30', tags:'宇治抹茶·排队名店',
+  intro:'宇治抹茶名店,抹茶荞麦面、生茶啫喱、抹茶巴菲都是招牌。排队1小时以上是常态。',
+  tip:'先取号再逛表参道;手信可回京都站/岚山店买'},
+shizuka:{cat:'food', n:'志津香釜饭(奈良)', price:'釜饭约¥1,500-2,500 ≈ ¥65-108', hr:'约11:00-15:00/17:00-20:00', tags:'排队名店·现炊',
+  intro:'奈良排队名店,小锅现炊釜饭。你点鸡肉/鳗鱼全熟,姐姐点海鲜釜饭。',
+  tip:'饭点排队1小时+,错峰去;锅巴是灵魂'},
+hirasou:{cat:'food', n:'平宗 柿叶寿司', price:'一盒约¥800-1,200 ≈ ¥34-52', hr:'约8:00-19:00', tags:'姐姐宵夜·非生食',
+  intro:'奈良名物,盐渍鲑鱼/鲭鱼的压寿司,不是生食刺身,姐姐带一盒当宵夜刚好。',
+  tip:'奈良町老街和JR奈良站都有店'},
+daibutsu:{cat:'food', n:'大佛布丁', price:'约¥450-500/个 ≈ ¥19-22', hr:'约10:00-18:00', tags:'甜品·奈良限定',
+  intro:'奈良限定甜点,罐装布丁超可爱,大佛造型的盖子可以留作纪念。',
+  tip:'JR奈良站、近铁奈良站都有店'},
+};
+// 美食分组
+const FOODGROUPS=[
+['大阪·道顿堀',['kureoru','daruma','chibo','mizuno','isomaru','daiki']],
+['黑门市场',['kuromonsampei']],
+['京都',['yoshimura','tofu','ichiran','ramenkoji','kaneyo','musashi']],
+['宇治抹茶',['nakamura']],
+['奈良',['shizuka','hirasou','daibutsu']],
 ];
 
 // ==================== 渲染行程 ====================
@@ -262,16 +470,60 @@ function renderDay(){
   const d=DAYS.find(x=>x.id===curDay);
   dayDetail.innerHTML=`<div class="card"><div class="bd">
     <div class="day-title">${d.emoji} ${d.title}</div>
-    <div class="timeline">${d.items.map(it=>`
+    <div class="timeline">${d.items.map(it=>{
+      const p=POIS[it.poi];
+      return `
       <div class="item">
         <div class="t">${it.t}</div>
-        <div class="c"><b>${it.b}</b><div class="d">${it.d}</div>
-        ${it.nav?`<div class="navrow"><a class="navbtn g" href="${navUrl(it.nav)}" target="_blank">🗺️ Google导航</a><a class="navbtn a" href="${navUrl(it.nav,1)}" target="_blank">🍎 苹果地图</a></div>`:''}
+        <div class="c">
+          ${p?`<b class="pname" data-poi="${it.poi}">${it.b}<span class="pico">📖</span></b>`:`<b>${it.b}</b>`}
+          <div class="d">${it.d}</div>
+          ${p&&p.tk&&p.tk!=='-'?`<div class="m"><span class="tk">🎫 ${p.tk}</span></div>`:''}
+          ${it.nav?`<div class="navrow"><a class="navbtn g" href="${navUrl(it.nav)}" target="_blank">🗺️ Google导航</a><a class="navbtn a" href="${navUrl(it.nav,1)}" target="_blank">🍎 苹果地图</a></div>`:''}
         </div>
-      </div>`).join('')}
+      </div>`;}).join('')}
     </div></div></div>`;
+  dayDetail.querySelectorAll('.pname').forEach(el=>el.onclick=()=>openSheet(el.dataset.poi));
 }
 renderChips();renderDay();
+
+// ==================== 介绍弹层 ====================
+const sheetMask=document.getElementById('sheetMask');
+function openSheet(k){
+  const p=POIS[k]; if(!p) return;
+  document.getElementById('shCat').textContent=p.cat==='food'?'🍜 美食':'📖 景点';
+  document.getElementById('shNm').textContent=p.n;
+  const row=(icon,label,val)=>`<div class="sheet-row"><div class="k">${icon} ${label}</div><div>${val}</div></div>`;
+  let rows=[`<div class="intro">${p.intro}</div>`];
+  if(p.tk&&p.tk!=='-') rows.push(row('🎫','门票',p.tk));
+  if(p.price) rows.push(row('💰','参考价',p.price));
+  if(p.hr) rows.push(row('🕐','时间',p.hr));
+  if(p.tags) rows.push(row('🍽️','分工',p.tags));
+  if(p.tip) rows.push(row('💡','贴士',p.tip));
+  document.getElementById('shBd').innerHTML=rows.join('');
+  const q=p.n;
+  document.getElementById('shFt').innerHTML=`<a class="navbtn g" target="_blank" href="${navUrl(q)}">🗺️ Google导航</a><a class="navbtn a" target="_blank" href="${navUrl(q,1)}">🍎 苹果地图</a>`;
+  sheetMask.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeSheet(){
+  sheetMask.classList.remove('show');
+  document.body.style.overflow='';
+}
+sheetMask.onclick=e=>{if(e.target===sheetMask)closeSheet();};
+document.getElementById('sheetX').onclick=closeSheet;
+
+// ==================== 美食列表 ====================
+const foodList=document.getElementById('foodList');
+foodList.innerHTML=FOODGROUPS.map(([g,keys])=>`
+  <div class="food-grp"><div class="gt">${g}</div>
+  ${keys.map(k=>{const p=POIS[k];return `
+    <div class="food-row" data-poi="${k}">
+      <div><div class="fn">${p.n}</div><div class="ft">${p.tags||''}</div></div>
+      <div class="fp">${p.price||''}</div>
+    </div>`;}).join('')}
+  </div>`).join('');
+foodList.querySelectorAll('.food-row').forEach(el=>el.onclick=()=>openSheet(el.dataset.poi));
 
 // ==================== 清单 ====================
 const CHECKGROUPS=[
@@ -318,6 +570,7 @@ const PHRASES=[
 ['これ、見せてください','请给我看看这个'],
 ['色違いはありますか','有其他颜色吗'],
 ['サーモンをください','请给我三文鱼'],
+['たこをください','请给我章鱼'],
 ['生ものは食べられません','我不吃生的'],
 ['火を通した料理でお願いします','请做熟的食物'],
 ['中国語のメニューはありますか','有中文菜单吗'],
@@ -329,6 +582,20 @@ pl.innerHTML=PHRASES.map(p=>`<div class="phrase" data-j="${p[0]}"><div><div clas
 pl.querySelectorAll('.phrase').forEach(el=>el.onclick=()=>{
   navigator.clipboard.writeText(el.dataset.j).then(()=>toast('已复制:'+el.dataset.j)).catch(()=>toast('复制失败'));
 });
+
+// ==================== 门票明细 ====================
+const TICKETS=[
+['大阪城天守阁','¥600','¥26'],
+['USJ环球影城','¥8,900-9,900','¥383-426'],
+['清水寺','¥500','¥22'],
+['天龙寺庭园','¥500','¥22'],
+['平等院(凤凰堂+¥300)','¥700','¥30'],
+['东大寺大佛殿','¥800','¥34'],
+['春日大社本殿','¥500','¥22'],
+['鹿仙贝','¥200/捆','¥9'],
+['通天阁登塔(可选)','¥900','¥39'],
+];
+document.getElementById('ticketTable').innerHTML='<tr><th>景点</th><th>日元</th><th>≈人民币</th></tr>'+TICKETS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
 
 // ==================== 预算 ====================
 const BUDGET=[
